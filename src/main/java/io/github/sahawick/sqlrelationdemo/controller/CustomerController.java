@@ -1,12 +1,11 @@
 package io.github.sahawick.sqlrelationdemo.controller;
 
 import io.github.sahawick.sqlrelationdemo.dto.CustomerDto;
+import io.github.sahawick.sqlrelationdemo.exception.CustomerNotFoundException;
 import io.github.sahawick.sqlrelationdemo.service.CustomerService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/customers")
@@ -19,5 +18,15 @@ public class CustomerController {
     public String saveCustomer(@RequestBody CustomerDto customerDto) {
         customerService.saveCustomer(customerDto);
         return "done!!!";
+    }
+
+    @GetMapping("/{customerId}")
+    public ResponseEntity<CustomerDto> getCustomer(@PathVariable Long customerId) {
+        try {
+            CustomerDto customerDto = customerService.getCustomer(customerId);
+            return ResponseEntity.ok(customerDto);
+        } catch (CustomerNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
