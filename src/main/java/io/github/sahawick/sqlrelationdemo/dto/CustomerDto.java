@@ -12,6 +12,7 @@ import java.util.List;
 @Builder
 public class CustomerDto {
 
+    private Long id;
     private String name;
     private String email;
     private List<OrderDto> orders;
