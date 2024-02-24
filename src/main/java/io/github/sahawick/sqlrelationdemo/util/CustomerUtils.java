@@ -38,4 +38,20 @@ public class CustomerUtils {
         customer.setOrders(customerDto.getOrders().stream().map(orderDtoToModel).collect(Collectors.toList()));
         return customer;
     }
+
+    public static final Function<Item, ItemDto>  itemModelToDto = item -> ItemDto.builder()
+            .name(item.getName())
+            .price(item.getPrice()).build();
+
+    private static final Function<Order, OrderDto> orderModelToDto = order -> OrderDto.builder()
+            .paymentMethod(order.getPaymentMethod())
+            .status(order.getStatus())
+            .items(order.getItems().stream().map(itemModelToDto).collect(Collectors.toList())).build();
+
+    public static CustomerDto mapToDto(Customer customer) {
+        return CustomerDto.builder().id(customer.getId())
+                .name(customer.getName())
+                .email(customer.getEmail())
+                .orders(customer.getOrders().stream().map(orderModelToDto).collect(Collectors.toList())).build();
+    }
 }
